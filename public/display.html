@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display - Basquete</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: #fff;
+            font-family: 'Segment7', monospace;
+            overflow: hidden;
+            user-select: none;
+        }
+        
+        @font-face {
+            font-family: 'Segment7';
+            src: url('assets/fonts/Segment7Standard.otf') format('opentype');
+        }
+        
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .game-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .quarter-info {
+            font-size: 2.5rem;
+            color: #E74412;
+            text-shadow: 0 0 10px rgba(231, 68, 18, 0.7);
+            margin-bottom: 10px;
+        }
+        
+        .game-clock {
+            font-size: 3rem;
+            color: #E74412;
+            text-shadow: 0 0 10px rgba(231, 68, 18, 0.7);
+            letter-spacing: 3px;
+        }
+        
+        .shot-clock-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+        
+        .shot-clock {
+            font-size: 25rem;
+            font-weight: bold;
+            color: #FF0000;
+            text-shadow: 0 0 40px rgba(255, 0, 0, 0.8);
+            line-height: 0.9;
+            letter-spacing: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .milliseconds {
+            font-size: 3rem;
+            color: #FF3333;
+            display: none;
+            margin-top: -20px;
+            text-shadow: 0 0 15px rgba(255, 51, 51, 0.7);
+        }
+        
+        .show-ms .milliseconds {
+            display: block;
+        }
+        
+        .shot-clock-label {
+            font-size: 2.5rem;
+            color: #FF5555;
+            margin-top: -10px;
+            letter-spacing: 8px;
+        }
+        
+        .team-bar {
+            display: flex;
+            justify-content: space-between;
+            width: 90%;
+            margin-top: 40px;
+        }
+        
+        .team {
+            display: flex;
+            align-items: center;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 3rem;
+            background-color: #111;
+            width: 45%;
+            justify-content: space-between;
+        }
+        
+        .team.active {
+            background-color: #333;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+        }
+        
+        .team-name {
+            font-family: 'Arial Black', Arial, sans-serif;
+            letter-spacing: 2px;
+            color: #FFF;
+        }
+        
+        .score {
+            color: #FFD700;
+            font-size: 4rem;
+            min-width: 100px;
+            text-align: right;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+        }
+        
+        .warning {
+            animation: pulse 1s infinite alternate;
+        }
+        
+        @keyframes pulse {
+            from { opacity: 1; }
+            to { opacity: 0.7; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="game-info">
+            <div class="quarter-info" id="quarterInfo">1º QUARTO</div>
+            <div class="game-clock" id="gameClock">12:00</div>
+        </div>
+        
+        <div class="shot-clock-container">
+            <div class="shot-clock" id="shotClock">24</div>
+            <div class="milliseconds" id="milliseconds">00</div>
+        </div>
+        
+        <div class="team-bar">
+            <div id="teamA" class="team active">
+                <span class="team-name">TIME A</span>
+                <span class="score" id="scoreA">0</span>
+            </div>
+            <div id="teamB" class="team">
+                <span class="team-name">TIME B</span>
+                <span class="score" id="scoreB">0</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Conexão WebSocket
+        let socket;
+        let reconnectAttempts = 0;
+        const maxReconnectAttempts = 5;
+        
+        function connectWebSocket() {
+            socket = new WebSocket('ws://localhost:3000');
+            
+            socket.onopen = function() {
+                console.log('Conectado ao servidor WebSocket');
+                reconnectAttempts = 0;
+                socket.send(JSON.stringify({ type: 'display' }));
+            };
+            
+            socket.onmessage = function(event) {
+                const data = JSON.parse(event.data);
+                updateDisplay(data);
+                
+                // Efeito de aviso quando o tempo está acabando
+                if (data.shotClock <= 5 && data.shotClock > 0) {
+                    document.getElementById('shotClock').classList.add('warning');
+                } else {
+                    document.getElementById('shotClock').classList.remove('warning');
+                }
+            };
+            
+            socket.onclose = function() {
+                console.log('Conexão WebSocket fechada');
+                if (reconnectAttempts < maxReconnectAttempts) {
+                    reconnectAttempts++;
+                    setTimeout(connectWebSocket, 2000);
+                }
+            };
+            
+            socket.onerror = function(error) {
+                console.error('Erro WebSocket:', error);
+            };
+        }
+        
+        // Atualiza os elementos da tela
+        function updateDisplay(data) {
+            if (data.quarter !== undefined) {
+                document.getElementById('quarterInfo').textContent = `${data.quarter}º QUARTO`;
+            }
+            
+            if (data.gameTime !== undefined) {
+                const minutes = Math.floor(data.gameTime / 60);
+                const seconds = Math.floor(data.gameTime % 60);
+                document.getElementById('gameClock').textContent = 
+                    `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            }
+            
+            if (data.shotClock !== undefined) {
+                const container = document.getElementById('shotClock').parentElement;
+                if (data.shotClock <= 10 && data.shotClock > 0) {
+                    container.classList.add('show-ms');
+                    document.getElementById('shotClock').textContent = 
+                        data.shotClock < 10 ? `0${data.shotClock}` : data.shotClock;
+                    document.getElementById('milliseconds').textContent = 
+                        `${data.milliseconds < 10 ? '0' : ''}${data.milliseconds}`;
+                } else {
+                    container.classList.remove('show-ms');
+                    document.getElementById('shotClock').textContent = 
+                        data.shotClock < 10 ? `0${data.shotClock}` : data.shotClock;
+                }
+            }
+            
+            if (data.activeTeam) {
+                document.getElementById('teamA').classList.toggle('active', data.activeTeam === 'A');
+                document.getElementById('teamB').classList.toggle('active', data.activeTeam === 'B');
+            }
+            
+            if (data.scoreA !== undefined) {
+                document.getElementById('scoreA').textContent = data.scoreA;
+            }
+            
+            if (data.scoreB !== undefined) {
+                document.getElementById('scoreB').textContent = data.scoreB;
+            }
+        }
+        
+        // Inicia a conexão
+        connectWebSocket();
+        
+        // Reconecta periodicamente se necessário
+        setInterval(() => {
+            if (socket && (socket.readyState === WebSocket.CLOSED || socket.readyState === WebSocket.CLOSING)) {
+                if (reconnectAttempts < maxReconnectAttempts) {
+                    connectWebSocket();
+                }
+            }
+        }, 5000);
+    </script>
+</body>
+</html>
