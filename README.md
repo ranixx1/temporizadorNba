@@ -1,134 +1,148 @@
-Sistema completo para controle de partidas de basquete com painel de controle remoto.
 
-📌 Recursos Principais
+# 🏀 Sistema de Controle de Partidas de Basquete
 
-    ⏱️ Temporizador de quarto (12 minutos)
-    
-    🔴 Shot clock (24/14 segundos) com centésimos nos últimos 10s
-    
-    🔄 Reset automático para 24 segundos com troca de posse
-    
-    🏀 Controle completo de todas as situações de jogo
-    
-    📊 Placar eletrônico com pontuação por time
-    
-    📱 Telas separadas para display e controle
-    
-    ⚡ Conexão em tempo real via WebSocket
+Sistema completo para gerenciamento de partidas de basquete com painel de controle remoto em tempo real.
 
-🚀 Como Instalar e Executar
-Pré-requisitos
-Node.js (v16 ou superior)
+---
 
-Navegador moderno (Chrome, Firefox, Edge)
+## 📌 Recursos Principais
 
-Passo a Passo
-Clone o repositório:
+- ⏱️ **Temporizador de quarto** com 12 minutos por período  
+- 🔴 **Shot Clock** de 24/14 segundos com precisão em centésimos nos últimos 10s  
+- 🔄 **Reset automático** do Shot Clock ao trocar a posse de bola  
+- 🏀 **Controle completo de jogo**, incluindo pontuação, posse e cronômetro  
+- 📊 **Placar eletrônico** com exibição para dois times  
+- 📱 **Telas separadas** para exibição (display) e controle (painel de comando)  
+- ⚡ **Atualização em tempo real** via WebSocket
 
-bash
-git clone https://github.com/Ranixx1/temporizadorNba.git
-Acesse a pasta do projeto:
+---
 
-bash
-cd temporizadorNba
-Instale as dependências:
+## 🚀 Instalação e Execução
 
-bash
-npm install
-Inicie o servidor:
+### ✅ Pré-requisitos
 
-bash
-npm start
+- [Node.js](https://nodejs.org/) (versão 16 ou superior)  
+- Navegador moderno (Chrome, Firefox, Edge)
 
+### 📦 Passo a passo
 
-Acesse as telas:
+1. Clone o repositório:
+   ```bash
+   git clone https://github.com/Ranixx1/temporizadorNba.git
+   ```
+2. Acesse a pasta do projeto:
+   ```bash
+   cd temporizadorNba
+   ```
+3. Instale as dependências:
+   ```bash
+   npm install
+   ```
+4. Inicie o servidor:
+   ```bash
+   npm start
+   ```
 
-    Display: http://localhost:3000/display.html
-    Controle: http://localhost:3000/control.html
+### 🌐 Acesso às Telas
 
+- **Display (visor):** [http://localhost:3000/display.html](http://localhost:3000/display.html)  
+- **Controle:** [http://localhost:3000/control.html](http://localhost:3000/control.html)
 
-🎮 Manual de Controles
-      Controles Gerais
-      Botão	Função
-      ▶️ Iniciar Jogo	Inicia todos os temporizadores
-      ⏸️ Pausar Jogo	Pausa todos os temporizadores
-      🔄 Novo Quarto	Avança para o próximo quarto (1º-4º)
-      Controle do Shot Clock
-      Botão	Função
-      24s	Reseta para 24 segundos
-      14s	Reseta para 14 segundos
-      ⏱️ Violação 8s	Marca violação e troca posse
-      Pontuação
-      Botão	Time A	Time B
-      +1 Ponto	✅ Add 1	✅ Add 1
-      +2 Pontos	✅ Add 2	✅ Add 2
-      +3 Pontos	✅ Add 3	✅ Add 3
-      -1 Ponto	✅ Remove 1	✅ Remove 1
+---
 
+## 🎮 Manual de Controles
 
-🖥️ Telas do Sistema
- Display Principal
+### 🕹️ Controles Gerais
 
-      Display
-      
-      Visor grande do shot clock (24s)
-      
-      Temporizador do quarto (12:00)
-      
-      Placar dos times
-      
-      Indicação de posse de bola
-      
-      Efeitos visuais quando o tempo está acabando
-      
-      Painel de Controle
-      Controle
-      
-      Controles completos do jogo
-      
-      Botões grandes para fácil acesso
-      
-      Feedback visual das ações
+| Botão            | Função                        |
+|------------------|-------------------------------|
+| ▶️ Iniciar Jogo  | Inicia todos os temporizadores |
+| ⏸️ Pausar Jogo   | Pausa todos os temporizadores  |
+| 🔄 Novo Quarto   | Avança para o próximo quarto   |
 
+### ⏲️ Controle do Shot Clock
 
-🛠️ Tecnologias Utilizadas
+| Botão             | Função                                  |
+|-------------------|------------------------------------------|
+| 24s               | Reseta o shot clock para 24 segundos     |
+| 14s               | Reseta o shot clock para 14 segundos     |
+| ⏱️ Violação 8s    | Marca violação e troca a posse de bola   |
 
-  Frontend: HTML5, CSS3, JavaScript
-  
-  Backend: Node.js, Express, WebSocket
-  
-  Design: Interface otimizada para visibilidade
+### 🧮 Pontuação
 
-📂 Estrutura de Arquivos
-        temporizadorNba/
-        ├── public/               # Arquivos frontend
-        │   ├── display.html      # Tela principal
-        │   ├── control.html      # Painel de controle
-        │   └── assets/           # Recursos estáticos(caso queira escolher outra fonte)
-        │       └── fonts/        # Fontes personalizadas(caso dejese)
-        ├── server.js             # Servidor backend
-        ├── package.json          # Dependências
-        ├── README.md             # Documentação
-        └── .gitignore            # Arquivos ignorados
-        
+| Ação       | Time A | Time B |
+|------------|--------|--------|
+| +1 Ponto   | ✅ Add 1 | ✅ Add 1 |
+| +2 Pontos  | ✅ Add 2 | ✅ Add 2 |
+| +3 Pontos  | ✅ Add 3 | ✅ Add 3 |
+| -1 Ponto   | ✅ Remove 1 | ✅ Remove 1 |
 
-🔧 Personalização
+---
 
-      Para alterar configurações:
-      
-      Tempo dos quartos: Modifique gameTime no server.js
-      
-      Cores: Edite as variáveis CSS no display.html
-      
-      Comportamento: Ajuste as funções em updateGameState()
-      
-⁉️ Solução de Problemas
-  
-      Problema: Conexão não estabelecida
-      Solução: Verifique se o servidor está rodando e recarregue as páginas
-      
-      Problema: Fontes não carregam
-      Solução: Verifique o caminho das fontes no CSS
-      
-      Problema: Comandos não respondem
-      Solução: Reinicie o servidor e verifique o console do navegador (F12)
+## 🖥️ Telas do Sistema
+
+### 🔵 **Display Principal**
+
+- Visor grande para o Shot Clock (24s)
+- Temporizador do quarto (12:00)
+- Placar de pontuação dos times
+- Indicação de posse de bola
+- Efeitos visuais nos últimos segundos
+
+### 🎛️ **Painel de Controle**
+
+- Interface amigável e responsiva
+- Botões grandes e de fácil acesso
+- Feedback visual em tempo real
+
+---
+
+## 🛠️ Tecnologias Utilizadas
+
+- **Frontend:** HTML5, CSS3, JavaScript  
+- **Backend:** Node.js, Express, WebSocket  
+- **Design:** Interface otimizada para visibilidade e usabilidade
+
+---
+
+## 📂 Estrutura de Arquivos
+
+```
+temporizadorNba/
+├── public/               # Arquivos do frontend
+│   ├── display.html      # Tela de exibição
+│   ├── control.html      # Painel de controle
+│   └── assets/           # Recursos estáticos
+│       └── fonts/        # Fontes personalizadas
+├── server.js             # Lógica do servidor Node.js
+├── package.json          # Gerenciador de dependências
+├── README.md             # Documentação do projeto
+└── .gitignore            # Arquivos ignorados no Git
+```
+
+---
+
+## 🎨 Personalização
+
+- **Tempo dos quartos:** edite a variável `gameTime` no arquivo `server.js`
+- **Cores e estilos:** modifique as variáveis CSS no arquivo `display.html`
+- **Comportamento do jogo:** ajuste as funções em `updateGameState()`
+
+---
+
+## ⁉️ Solução de Problemas
+
+| Problema                          | Solução                                                                 |
+|----------------------------------|-------------------------------------------------------------------------|
+| ❌ Conexão não estabelecida       | Verifique se o servidor está rodando e recarregue as páginas            |
+| 🔤 Fontes não carregam            | Confirme se o caminho para as fontes está correto no CSS                |
+| 🕹️ Comandos não funcionam        | Reinicie o servidor e verifique o console do navegador (F12)           |
+
+---
+
+## 💡 Contribuições
+
+Sinta-se à vontade para abrir *issues* ou enviar *pull requests* com melhorias, correções ou sugestões!
+
+---
+
